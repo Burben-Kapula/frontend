@@ -3,13 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "backend/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "node backend/index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "axios": "^1.13.2",

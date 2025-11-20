@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import noteService from './services/note'; // (або ./models/note якщо так лишаєш)
+import noteService from './models/note'; // (або ./models/note якщо так лишаєш)
 import './App.css';
 
 function App() {

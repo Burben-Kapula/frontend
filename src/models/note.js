@@ -1,25 +1,27 @@
 import axios from 'axios';
 
-const baseUrl = '/api/notes';
 
-// Отримати всі нотатки (GET)
+const baseUrl = '/api/persons'
+
+
+// Отримати всі контакти (GET)
 const getAll = () => {
     return axios.get(baseUrl).then(response => response.data);
 };
 
-// Додати нову нотатку (POST)
-const create = (newNote) => {
-    return axios.post(baseUrl, newNote).then(response => response.data);
+
+// Додати новий контакт (POST)
+const create = (newPerson) => {
+    return axios.post(baseUrl, newPerson).then(response => response.data);
 };
 
-// Видалити нотатку (DELETE)
+
+// Видалити контакт (DELETE) — знадобиться для 2.14
 const remove = (id) => {
     return axios.delete(`${baseUrl}/${id}`);
 };
-
-// Оновити нотатку (PUT)
-const update = (id, changedNote) => {
-    return axios.put(`${baseUrl}/${id}`, changedNote).then(res => res.data);
+const update = (id, changedPerson) => {
+    return axios.put(`${baseUrl}/${id}`, changedPerson).then(res => res.data);
 };
-
 export default { getAll, create, remove, update };
+

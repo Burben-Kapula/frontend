@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const baseUrl = '/api/persons'
+const baseUrl = '/api/persons';
 
 
 // Отримати всі контакти (GET)

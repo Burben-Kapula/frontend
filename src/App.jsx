@@ -16,54 +16,71 @@ function App() {
     const addPerson = (event) => {
         event.preventDefault();
 
+        // Check for empty fields
+        if (!newName.trim() || !newNumber.trim()) {
+            alert('Please enter both name and number!');
+            return;
+        }
+
+        // Check for duplicate name (case-insensitive)
         const existingPerson = persons.find(
             p => p.name && newName && p.name.toLowerCase() === newName.toLowerCase()
         );
         const newPerson = { name: newName, number: newNumber };
 
+        // If contact exists, confirm replacement
         if (existingPerson) {
             if (window.confirm(
-                `${existingPerson.name} is already added to phonebook, replace the old number with a new one?`
+                `${existingPerson.name} is already in the phonebook. Replace the old number with the new one?`
             )) {
                 personService
-                    .update(existingPerson.id, newPerson)
+                    .update(existingPerson.id || existingPerson._id, newPerson)
                     .then(updatedPerson => {
-                        setPersons(persons.map(p => p.id !== existingPerson.id ? p : updatedPerson));
+                        setPersons(persons.map(
+                            p => (p.id || p._id) !== (existingPerson.id || existingPerson._id) ? p : updatedPerson
+                        ));
                         setNewName('');
                         setNewNumber('');
-                        setHighlightedId(updatedPerson.id);
+                        setHighlightedId(updatedPerson.id || updatedPerson._id);
                         setTimeout(() => setHighlightedId(null), 1500);
+                    })
+                    .catch(() => {
+                        alert('Error updating contact!');
                     });
             }
+            // If cancelled, do nothing
             return;
         }
 
-        personService.create(newPerson).then(returnedPerson => {
-            setPersons(persons.concat(returnedPerson));
-            setNewName('');
-            setNewNumber('');
-            setHighlightedId(returnedPerson.id);
-            setTimeout(() => setHighlightedId(null), 1500);
-        });
+        // Create new contact
+        personService.create(newPerson)
+            .then(returnedPerson => {
+                setPersons(persons.concat(returnedPerson));
+                setNewName('');
+                setNewNumber('');
+                setHighlightedId(returnedPerson.id || returnedPerson._id);
+                setTimeout(() => setHighlightedId(null), 1500);
+            })
+            .catch(() => {
+                alert('Error adding contact!');
+            });
     };
 
- const deletePerson = (id, name) => {
-  if (window.confirm(`Delete ${name}?`)) {
-    personService
-      .remove(id)
-      .then(() => {
-        setPersons(persons.filter(
-          person => person.id !== id && person._id !== id
-        ));
-      })
-      .catch(() => {
-        alert('Failed to delete contact!');
-        // Додатково можна оновити список, якщо треба:
-        personService.getAll().then(data => setPersons(data));
-      });
-  }
-};
-
+    const deletePerson = (id, name) => {
+        if (window.confirm(`Delete ${name}?`)) {
+            personService
+                .remove(id)
+                .then(() => {
+                    setPersons(persons.filter(
+                        person => person.id !== id && person._id !== id
+                    ));
+                })
+                .catch(() => {
+                    alert('Failed to delete contact!');
+                    personService.getAll().then(data => setPersons(data));
+                });
+        }
+    };
 
     const personsToShow = persons.filter(person =>
         person.name && person.name.toLowerCase().includes(filter.toLowerCase())
@@ -73,17 +90,17 @@ function App() {
         <div>
             <h2>Phonebook</h2>
             <div>
-                filter shown with: <input value={filter} onChange={(e) => setFilter(e.target.value)} />
+                Filter shown with: <input value={filter} onChange={(e) => setFilter(e.target.value)} />
             </div>
             <h3>Add a new</h3>
             <form onSubmit={addPerson}>
                 <div>
-                    name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
+                    Name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
                 </div>
                 <div>
-                    number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
+                    Number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
                 </div>
-                <button type="submit">add</button>
+                <button type="submit">Add</button>
             </form>
             <h3>Numbers</h3>
             <ul>

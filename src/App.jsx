@@ -47,15 +47,23 @@ function App() {
         });
     };
 
-    const deletePerson = (id, name) => {
-        if (window.confirm(`Delete ${name}?`)) {
-            personService
-                .remove(id)
-                .then(() => {
-                    setPersons(persons.filter(person => person.id !== id));
-                });
-        }
-    };
+ const deletePerson = (id, name) => {
+  if (window.confirm(`Delete ${name}?`)) {
+    personService
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(
+          person => person.id !== id && person._id !== id
+        ));
+      })
+      .catch(() => {
+        alert('Failed to delete contact!');
+        // Додатково можна оновити список, якщо треба:
+        personService.getAll().then(data => setPersons(data));
+      });
+  }
+};
+
 
     const personsToShow = persons.filter(person =>
         person.name && person.name.toLowerCase().includes(filter.toLowerCase())

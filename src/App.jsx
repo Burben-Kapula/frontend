@@ -106,12 +106,13 @@ function App() {
             <ul>
                 {personsToShow.map(person => (
                     <li
-                        key={person.id || person._id}
-                        className={person.id === highlightedId ? 'highlight' : ''}
+                        key={person._id}
+                        className={person._id === highlightedId ? 'highlight' : ''}
                     >
                         {person.name} — {person.number}
-                        <button onClick={() => deletePerson(person.id || person._id, person.name)}>delete</button>
+                        <button onClick={() => deletePerson(person._id, person.name)}>delete</button>
                     </li>
+
                 ))}
             </ul>
         </div>

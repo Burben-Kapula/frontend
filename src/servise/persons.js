@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const baseUrl = 'https://for-public2.onrender.com/api/persons';
+const baseUrl = 'https://beckend-backup.onrender.com/';
 
 
 // Отримати всі контакти (GET)

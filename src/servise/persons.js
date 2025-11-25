@@ -1,16 +1,29 @@
 import axios from 'axios';
 
-const baseUrl = 'https://for-public2.onrender.com'
-export const getAll = () =>
-  axios.get(baseUrl).then(res => res.data);
 
-export const create = newPerson =>
-  axios.post(baseUrl, newPerson).then(res => res.data);
+const baseUrl = 'https://twobeckend-main.onrender.com/api/persons';
 
-export const remove = id =>
-  axios.delete(`${baseUrl}/${id}`);
 
-export const update = (id, changedPerson) =>
-  axios.put(`${baseUrl}/${id}`, changedPerson).then(res => res.data);
 
+// Отримати всі контакти (GET)
+const getAll = () => {
+    return axios.get(baseUrl).then(response => response.data);
+};
+
+
+// Додати новий контакт (POST)
+const create = (newPerson) => {
+    return axios.post(baseUrl, newPerson).then(response => response.data);
+};
+
+
+// Видалити контакт (DELETE) — знадобиться для 2.14
+const remove = (id) => {
+    return axios.delete(`${baseUrl}/${id}`);
+};
+const update = (id, changedPerson) => {
+    return axios.put(`${baseUrl}/${id}`, changedPerson).then(res => res.data);
+};
 export default { getAll, create, remove, update };
+
+// Додати новий контакт (POST)
